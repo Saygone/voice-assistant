@@ -33,7 +33,7 @@ def speak(what):
 
 
 def callback(recognizer, audio):
-	# Рсапознавание голоса и превращение его в строку
+	# Рапознавание голоса и превращение его в строку
     try:
         voice = recognizer.recognize_google(audio, language="ru-RU").lower()
         print("[log] Распознано: " + voice)
