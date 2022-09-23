@@ -10,7 +10,7 @@ import datetime
 headers = {
 	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
-# настройки
+# Кодовые слова для работы программы
 opts = {
     "alias": ('ва','голосовой помощник','голосовой ассистент','ассистент','voice assistant','помощник'),
     "tbr": ('скажи', 'расскажи', 'покажи', 'сколько', 'произнеси'),
@@ -24,7 +24,7 @@ opts = {
 }
 
 
-# функции
+# Функциии
 def speak(what):
     print(what)
     speak_engine.say(what)
@@ -33,6 +33,7 @@ def speak(what):
 
 
 def callback(recognizer, audio):
+	# Рсапознавание голоса и превращение его в строку
     try:
         voice = recognizer.recognize_google(audio, language="ru-RU").lower()
         print("[log] Распознано: " + voice)
@@ -50,7 +51,8 @@ def callback(recognizer, audio):
             # распознаем и выполняем команду
             cmd = recognize_cmd(cmd)
             execute_cmd(cmd['cmd'])
-
+	
+	# На случай если голос не распознался
     except sr.UnknownValueError:
         print("[log] Голос не распознан!")
     except sr.RequestError as e:
@@ -71,40 +73,44 @@ def recognize_cmd(cmd):
 
 
 def execute_cmd(cmd):
+	# Текущее время
     if cmd == 'ctime':
-        # сказать текущее время
         now = datetime.datetime.now()
         speak("Сейчас " + str(now.hour) + ":" + str(now.minute))
 
+	# Шутка
     elif cmd == 'stupid1':
-        # рассказать анекдот
         speak("1234567890")
-
+	
+	# Модуль погоды
     elif cmd == 'weather':
         print('Какой ваш город ?')
         import Weather
 
+	# Веб запрос
     elif cmd == 'search':
         print('Какой ваш запрос ?')
         import web
 
+	# Команда не распознана
     else:
         print('Команда не распознана, повторите!')
 
 
 
-# запуск
+# Подключение распознавания и микрофона
 r = sr.Recognizer()
 m = sr.Microphone(device_index=1)
 
 with m as source:
     r.adjust_for_ambient_noise(source)
 
+# Запуск
 speak_engine = pyttsx3.init()
 
-
+# Приветствие
 speak("Добрый день, Голосовой помощник на связи")
 speak("Слушаю команду")
 
 stop_listening = r.listen_in_background(m, callback)
-while True: time.sleep(0.1) # infinity loop
+while True: time.sleep(0.1) # Бесконечный цикл
