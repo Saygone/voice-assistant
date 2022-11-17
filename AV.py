@@ -95,7 +95,7 @@ def execute_cmd(cmd):
 	
 	# Прерывание цикла
     elif cmd == 'end':
-        break
+        False
 	
 	# Команда не распознана
     else:
